@@ -1,0 +1,46 @@
+<div class="dashboard-container">
+  <mat-toolbar color="primary"> Bar do Malhado </mat-toolbar>
+
+  <div class="content-container">
+    <nav class="navigation-rail">
+      <button mat-fab color="accent" (click)="onAddConta()">
+        <mat-icon class="mat-18">add</mat-icon>
+      </button>
+
+      <button
+        mat-fab
+        extended
+        *ngFor="let option of navOptions; let i = index"
+        [color]="selectedOption == option.value ? 'primary' : 'default'"
+        (click)="onSelectOption(option, i)"
+        class="nav-button"
+      >
+        <mat-icon class="mat-18">{{ option.icon }}</mat-icon>
+        {{ option.label }}
+      </button>
+    </nav>
+
+    <div class="selected-component">
+      <ng-container *ngIf="selectedOption; else defaultContent">
+        <div *ngFor="let option of [selectedOption]" [@slideAnimation]>
+          <ng-container [ngSwitch]="selectedOption">
+            <div *ngSwitchCase="'contasAberto'">
+              <app-notas-aberto />
+            </div>
+  
+            <div *ngSwitchCase="'contasArquivado'">
+              <h1>Contas Arquivadas</h1>
+            </div>
+  
+            <div *ngSwitchCase="'clientes'">
+              <h1>Cadastro de Clientes</h1>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-template #defaultContent>
+        <p>Selecione uma opção na Navigation Rail.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

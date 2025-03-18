@@ -1,0 +1,17 @@
+<div class="container">
+  <header>
+    <h1>Contas em Aberto</h1>
+
+    <button mat-fab extended (click)="onCreateConta()">
+      <mat-icon class="mat-18">add</mat-icon>
+      Nova Conta
+    </button>
+  </header>
+  <div class="notas-container">
+    <app-conta-cliente
+      *ngFor="let nota of notas"
+      [conta]="nota"
+      (fecharConta)="onFecharConta($event)"
+      (deleteConta)="onDeleteConta($event)" />
+  </div>
+</div>

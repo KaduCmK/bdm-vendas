@@ -1,0 +1,52 @@
+.nota-card {
+    width: 25vw;
+    height: min-content;
+    box-sizing: border-box;
+}
+
+.nota-card mat-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding:  0 8px;
+}
+
+.nota-card mat-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nota-card mat-card-content  {
+    padding: 0;
+}
+
+.nota-card mat-card-footer {
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+}
+
+.nota-card mat-card-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0 16px 16px 16px;
+}
+
+.items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.novo-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,4 +1,11 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
-  "recommendations": ["angular.ng-template"]
+    "recommendations": [
+        "johnpapa.angular2",
+        "john-crowson.angular-file-changer",
+        "angular.ng-template",
+        "cyrilletuzi.angular-schematics",
+        "ms-vscode.vscode-typescript-next",
+        "yoavbls.pretty-ts-errors",
+        "mrmlnc.vscode-scss"
+    ]
 }
