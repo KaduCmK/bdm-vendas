@@ -9,8 +9,8 @@
   </header>
   <div class="notas-container">
     <app-conta-cliente
-      *ngFor="let nota of notas"
-      [conta]="nota"
+      *ngFor="let conta of contas"
+      [conta]="conta"
       (fecharConta)="onFecharConta($event)"
       (deleteConta)="onDeleteConta($event)" />
   </div>

@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { NavOption } from '../../../models/NavOption.model';
 import { MatButtonModule } from '@angular/material/button';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { PainelClientesComponent } from '../painel-clientes/painel-clientes.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     NotasAbertoComponent,
+    PainelClientesComponent,
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,

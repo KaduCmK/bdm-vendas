@@ -1,0 +1,22 @@
+<div class="container">
+  <header>
+    <h1>Cadastro de Clientes</h1>
+
+    <button mat-fab extended (click)="onCreateCliente()">
+      <mat-icon class="mat-18">add</mat-icon>
+      Novo Cliente
+    </button>
+  </header>
+
+  <div class="content">
+    @for (cliente of clientes; track $index) {
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>person</mat-icon>
+        <mat-card-title>{{ cliente.nome }}</mat-card-title>
+        @if (cliente.dataCriacao) {<mat-card-subtitle>Criado em {{ cliente.dataCriacao.toDate() | date:'dd/MM/yyyy' }}</mat-card-subtitle>}
+      </mat-card-header>
+    </mat-card>
+    }
+  </div>
+</div>

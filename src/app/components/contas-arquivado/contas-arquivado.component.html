@@ -1,0 +1,11 @@
+<div class="container">
+    <header>
+      <h1>Contas Arquivadas</h1>
+    </header>
+    <div class="notas-container">
+      <app-conta-cliente
+        *ngFor="let conta of contas"
+        [conta]="conta" />
+    </div>
+  </div>
+  

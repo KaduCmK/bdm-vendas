@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { Nota } from '../../../models/Nota.model';
+import { Component, inject, OnInit } from '@angular/core';
+import { Conta } from '../../../models/Conta.model';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { ContaClienteComponent } from '../conta-cliente/conta-cliente.component'
 import { MatDialog } from '@angular/material/dialog';
 import { NovaContaDialogComponent } from '../nova-conta-dialog/nova-conta-dialog.component';
 import { Cliente } from '../../../models/Cliente.model';
+import { FirestoreService } from '../../../services/firestore.service';
 
 @Component({
   selector: 'app-notas-aberto',
@@ -19,13 +20,18 @@ import { Cliente } from '../../../models/Cliente.model';
   templateUrl: './notas-aberto.component.html',
   styleUrl: './notas-aberto.component.scss',
 })
-export class NotasAbertoComponent {
+export class NotasAbertoComponent implements OnInit {
   readonly dialog = inject(MatDialog);
-  
-  notas: Array<Nota> = [];
+  readonly firestore = inject(FirestoreService);
+  contas: Array<Conta> = [];
+
   displayedColumns: string[] = ['produto', 'quantidade', 'subtotal', 'actions'];
 
-  constructor() {}
+  ngOnInit(): void {
+    this.firestore.getContas().subscribe(contas => {
+      this.contas = contas;
+    })
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(NovaContaDialogComponent, {
@@ -37,20 +43,15 @@ export class NotasAbertoComponent {
     });
   }
 
-  onFecharConta(nota: Nota) {
+  onFecharConta(nota: Conta) {
     console.log('Nota fechada', nota);
   }
 
-  onDeleteConta(nota: Nota) {
-    this.notas.splice(this.notas.indexOf(nota), 1);
+  onDeleteConta(conta: Conta) {
+    this.firestore.deleteConta(conta);
   }
 
   onCreateConta(cliente: Cliente) {
-    this.notas.push({
-      cliente,
-      data: new Date(),
-      produtos: [],
-      total: 0,
-    });
+    this.firestore.addConta(cliente)
   }
 }
