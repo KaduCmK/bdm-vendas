@@ -1,10 +1,12 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Nota } from '../../../models/Nota.model';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { Produto } from '../../../models/Produto.model';
 import { MatIconModule } from '@angular/material/icon';
-import { ContaClienteComponent } from "../conta-cliente/conta-cliente.component";
+import { ContaClienteComponent } from '../conta-cliente/conta-cliente.component';
+import { MatDialog } from '@angular/material/dialog';
+import { NovaContaDialogComponent } from '../nova-conta-dialog/nova-conta-dialog.component';
+import { Cliente } from '../../../models/Cliente.model';
 
 @Component({
   selector: 'app-notas-aberto',
@@ -12,33 +14,28 @@ import { ContaClienteComponent } from "../conta-cliente/conta-cliente.component"
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    ContaClienteComponent
-],
+    ContaClienteComponent,
+  ],
   templateUrl: './notas-aberto.component.html',
   styleUrl: './notas-aberto.component.scss',
 })
 export class NotasAbertoComponent {
-  notas: Array<Nota> = [
-    {
-      cliente: { nome: 'João' },
-      data: new Date(),
-      produtos: [
-        { nome: 'itaipava litrao', quantidade: 2, valor: 7.5 },
-        { nome: 'agua 250ml', quantidade: 1, valor: 2.5 },
-      ],
-      total: 0,
-    },
-    { cliente: { nome: 'Fulano' }, data: new Date(), produtos: [], total: 100 },
-    {
-      cliente: { nome: 'Beltrano' },
-      data: new Date(),
-      produtos: [],
-      total: 100,
-    },
-  ];
+  readonly dialog = inject(MatDialog);
+  
+  notas: Array<Nota> = [];
   displayedColumns: string[] = ['produto', 'quantidade', 'subtotal', 'actions'];
 
   constructor() {}
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(NovaContaDialogComponent, {
+      data: { nome: '' }
+    });
+
+    dialogRef.afterClosed().subscribe((result: Cliente) => {
+      this.onCreateConta(result);
+    });
+  }
 
   onFecharConta(nota: Nota) {
     console.log('Nota fechada', nota);
@@ -48,9 +45,9 @@ export class NotasAbertoComponent {
     this.notas.splice(this.notas.indexOf(nota), 1);
   }
 
-  onCreateConta() {
+  onCreateConta(cliente: Cliente) {
     this.notas.push({
-      cliente: { nome: 'Novo Cliente' },
+      cliente,
       data: new Date(),
       produtos: [],
       total: 0,

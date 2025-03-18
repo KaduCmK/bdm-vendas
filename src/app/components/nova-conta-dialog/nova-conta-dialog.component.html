@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Abrir nova conta</h2>
+<mat-dialog-content>
+    <p>Escolha um cliente ou cadastre um novo automaticamente:</p>
+    <form [formGroup]="form" (ngSubmit)="onConfirm()">
+        <mat-form-field>
+            <mat-label>Cliente</mat-label>
+            <input matInput formControlName="nome" [matAutocomplete]="auto" />
+            <mat-autocomplete #auto="matAutocomplete">
+                @for (cliente of filteredOptions | async; track $index) {
+                    <mat-option [value]="cliente">
+                        {{cliente}}
+                    </mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onDismiss()">Cancelar</button>
+    <button mat-button (click)="onConfirm()">Criar conta</button>
+</mat-dialog-actions>

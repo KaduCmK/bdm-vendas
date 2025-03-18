@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { Nota } from '../../../models/Nota.model';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { Produto } from '../../../models/Produto.model';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -24,7 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatTableModule,
     DatePipe,
     CurrencyPipe,
-    FormsModule
+    ReactiveFormsModule
   ],
   templateUrl: './conta-cliente.component.html',
   styleUrl: './conta-cliente.component.scss',
@@ -38,45 +38,53 @@ export class ContaClienteComponent {
   displayedColumns: string[] = ['produto', 'quantidade', 'subtotal', 'actions'];
   @ViewChild(MatTable) table!: MatTable<Produto>;
 
+  form = new FormGroup({
+    nome: new FormControl(null, Validators.required),
+    preco: new FormControl(null, Validators.required),
+  })
+  get controls() { return this.form.controls;}
+
   constructor() {}
 
-  addQuantity(nota: Nota, produto: Produto) {
+  addQuantity(produto: Produto) {
     produto.quantidade++;
-    nota.total = nota.produtos.reduce(
+    this.conta.total = this.conta.produtos.reduce(
       (acc, prod) => acc + prod.valor * prod.quantidade,
       0
     );
   }
 
-  onAddProduto(nota: Nota, nome: string, preco: string, form: NgForm) {
-    if (!nome || !preco) {
-      // Aqui você pode implementar uma mensagem de validação, se necessário.
-      return;
-    }
-
+  onAddProduto() {
     const novoProduto: Produto = {
-      nome: nome,
+      nome: this.controls.nome.value!,
       quantidade: 1, // Valor inicial de quantidade
-      valor: parseFloat(preco),
+      valor: parseFloat(this.controls.preco.value!),
     };
 
-    nota.produtos.push(novoProduto);
+    this.conta.produtos.push(novoProduto);
+    this._setTotal();
 
-    // Atualiza o total da nota com base nos produtos
-    nota.total = nota.produtos.reduce(
+    this.table.renderRows();
+    this.form.reset();
+  }
+
+  onDeleteProduto(produto: Produto) {
+    const index = this.conta.produtos.indexOf(produto);
+    this.conta.produtos.splice(index, 1);
+
+    this._setTotal();
+
+    this.table.renderRows();
+  }
+
+  private _setTotal() {
+    this.conta.total = this.conta.produtos.reduce(
       (acc, prod) => acc + prod.valor * prod.quantidade,
       0
     );
-
-    this.table.renderRows();
-    form.resetForm();
   }
 
-  onFecharConta() {
-    this.fecharConta.emit(this.conta);
-  }
+  onFecharConta() { this.fecharConta.emit(this.conta); }
 
-  onDeleteConta() {
-    this.deleteConta.emit(this.conta);
-  }
+  onDeleteConta() { this.deleteConta.emit(this.conta); }
 }
